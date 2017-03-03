@@ -10,7 +10,6 @@
 **********************************************************/
 Coin::Coin()
 {
-	srand(time(0));
 	int x = rand() % 2;
 
 	if (x == 0)
@@ -33,7 +32,6 @@ Coin::Coin(int coinValue)
 {	
 	value = coinValue;
 
-	srand(time(0));
 	int x = rand() % 2;
 
 	if (x == 0)
