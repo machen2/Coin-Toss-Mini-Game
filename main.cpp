@@ -5,31 +5,58 @@
 
 using namespace std;
 
+//Initialize objects and variables
+Coin quarter(25);
+Coin nickel(5);
+Coin dime(10);
+char input;
+int totalBalance = 0;
+
+//Function Definitions
+void welcome();
+void callStart();
+bool startGame();
+void goodbye();
+
 int main()
 {
 	//Set seed
 	srand(time(NULL));
 
-	//Initialize variables and objects
+	welcome();
 
-	int totalBalance = 0;
-	Coin quarter(25);
-	Coin nickel(5);
-	Coin dime(10);
-	char input;
-	int roundCount = 0;
+	input = cin.get();
+	cin.ignore(100, '\n');
+	input = toupper(input);
 
+	if (input == 'Q') {
+		goodbye(); 
+		return 0;
+	}
+
+	callStart();
+
+	goodbye();
+
+	return 0;
+}
+
+/***************************************************
+* Description: Prints Welcome Message to the user  *
+***************************************************/
+
+void welcome() {
 	//Welcome Message and Directions
 
 	string welcome = "                  ____      _         _____\n"
-"                 / ___|___ (_)_ __   |_   _|__  ___ ___ \n"
-"                | |   / _ \\| | \'_ \\    | |/ _ \\/ __/ __|\n"
-"                | |__| (_) | | | | |   | | (_) \\__ \\__ \\ \n"
-"                 \\____\\___/|_|_|_|_| __|_|\\___/|___/___/ \n"
-"                |  \\/  (_)_ __ (_)  / ___| __ _ _ __ ___   ___ \n"
-"                | |\\/| | | \'_ \\| | | |  _ / _` | \'_ ` _ \\ / _ \\ \n"
-"                | |  | | | | | | | | |_| | (_| | | | | | |  __/ \n"
-"                |_|  |_|_|_| |_|_|  \\____|\\__,_|_| |_| |_|\\___|"; 
+		"                 / ___|___ (_)_ __   |_   _|__  ___ ___ \n"
+		"                | |   / _ \\| | \'_ \\    | |/ _ \\/ __/ __|\n"
+		"                | |__| (_) | | | | |   | | (_) \\__ \\__ \\ \n"
+		"                 \\____\\___/|_|_|_|_| __|_|\\___/|___/___/ \n"
+		"                |  \\/  (_)_ __ (_)  / ___| __ _ _ __ ___   ___ \n"
+		"                | |\\/| | | \'_ \\| | | |  _ / _` | \'_ ` _ \\ / _ \\ \n"
+		"                | |  | | | | | | | | |_| | (_| | | | | | |  __/ \n"
+		"                |_|  |_|_|_| |_|_|  \\____|\\__,_|_| |_| |_|\\___|";
 
 	cout << welcome << endl << endl;
 
@@ -49,15 +76,29 @@ int main()
 	cout << "   Nickel: " << nickel.getSideUp() << "." << endl << endl;
 	cout << " Your balance is " << totalBalance << " cents." << endl << endl;
 
-	cout << " Press [ENTER] to begin or type 'Q' to quit.\n";
+	cout << " Press 'T' + [ENTER] to begin or type 'Q' + [ENTER] to quit.\n";
+	cout << " > ";
+}
 
-	input = cin.get();
-	cin.ignore(100, '\n');
-	input = toupper(input);
-
-	if (input == 'Q') {
-		return 0;
+/**************************************************************
+* Description: Controls the game. Will recall the startGame   * 
+*  method if it returns true.                                 *
+***************************************************************/
+void callStart() {
+	bool restart = true;
+	while(restart) {
+		restart = startGame();
 	}
+}
+
+/**************************************************************
+* Description: Calls the main game.                           *
+* Output: <true or false, boolean> true if the user wants to  *
+* play antother game or false if user does not                *
+***************************************************************/
+bool startGame() {
+	totalBalance = 0; //reset total balance
+	int roundCount = 0; // reset
 
 	while (input != 'Q' && totalBalance < 100) {
 		roundCount++;
@@ -88,7 +129,7 @@ int main()
 
 		cout << " Your new balance is " << totalBalance << " cents." << endl << endl;
 
-		//Check total balance to see if the game is over
+		//Check total balance to see if the game is over and outcome
 		if (totalBalance == 100) {
 			cout << "~~~~~~~~~~~ Game Over ~~~~~~~~~~~" << endl;
 			cout << " YOU WON!! Congratulations!" << endl << endl;
@@ -98,12 +139,51 @@ int main()
 			cout << " You lost. Better luck next time!" << endl << endl;
 		}
 		else {
-			cout << "Press [ENTER] to move to the next round." << endl;
+			cout << " Press 'T' + [ENTER] to move to the next round or 'Q' + [ENTER] to quit." << endl;
+			cout << " > ";
 			input = cin.get();
 			cin.ignore(100, '\n');
 			input = toupper(input);
+
+			if (input == 'Q')
+				return false;
 		}
+	}//end while loop
+
+	cout << "\n Would you like to play again?\n" << endl;
+	cout << " Please press 'Y' + [ENTER] to play another game, or 'Q' + [ENTER] to quit." << endl;
+	cout << " > ";
+
+	//Check user input to play again
+	char playAgain;
+	playAgain = cin.get();
+	cin.ignore(100, '\n');
+	playAgain = toupper(playAgain);
+
+	while(playAgain != 'Y' && playAgain != 'Q'){
+		cout << endl << " Please enter either 'Y' or 'Q'." << endl;
+		cout << " > ";
+
+		playAgain = cin.get();
+		cin.ignore(100, '\n');
+		playAgain = toupper(playAgain);
 	}
 
-	return 0;
+	if (playAgain == 'Y') 
+	{	
+		cout << endl << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+		cout << endl << " Starting a new game! Your balance starts again at 0 cents." << endl << endl;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+/***************************************************
+* Description: Prints Goodbye Message to the user  *
+***************************************************/
+void goodbye() {
+	cout << endl << " Thank you for playing! Goodbye~!" << endl << endl;
 }
